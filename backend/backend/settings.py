@@ -3,23 +3,22 @@ from datetime import timedelta
 from dotenv import load_dotenv
 import os
 
+# Загружаем переменные среды из файла .env
 load_dotenv()
 
-# Создание путей внутри проекта, таких как BASE_DIR / 'subdir'.
+# Определяем базовый путь к проекту
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-# Настройки для быстрого старта разработки - непригодны для эксплуатации
-# См. https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
-
-# ВНИМАНИЕ: храните секретный ключ в секрете на production сервере!
+# Секретный ключ для проекта Django (используйте другой для production)
 SECRET_KEY = "django-insecure-h+%!ji6#v19k_l%lnr!74xd9g$damtd74fp*b9n*(k20d^ak85"
 
-# ВНИМАНИЕ: не запускайте сервер с включённым debug режимом на production!
+# Включаем отладочный режим (Debug) только для разработки, на production устанавливается в False
 DEBUG = True
 
+# Разрешенные хосты для подключения (разрешен доступ с любого хоста)
 ALLOWED_HOSTS = ["*"]
 
+# Настройки REST Framework, используем JWT для аутентификации
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
@@ -29,13 +28,13 @@ REST_FRAMEWORK = {
     ],
 }
 
+# Настройки токенов JWT: время жизни токена доступа и обновления
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
 }
 
-# Определение приложений
-
+# Установленные приложения
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -43,15 +42,16 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "api",
-    "users",
-    "rest_framework",
-    "corsheaders",
+    "api",  # Приложение api
+    "users.apps.UsersConfig",  # Приложение users
+    "rest_framework",  # Django REST Framework
+    "corsheaders",  # CORS Headers для настройки кросс-доменных запросов
 ]
 
+# Middleware
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "corsheaders.middleware.CorsMiddleware",
+    "corsheaders.middleware.CorsMiddleware",  # CORS Middleware для обработки кросс-доменных запросов
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -60,8 +60,10 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
+# Главный файл настроек URL
 ROOT_URLCONF = "backend.urls"
 
+# Настройки шаблонов Django
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
@@ -78,23 +80,18 @@ TEMPLATES = [
     },
 ]
 
+# Приложение WSGI
 WSGI_APPLICATION = "backend.wsgi.application"
 
-
-# База данных
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
+# Настройки базы данных
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.sqlite3",  # Движок базы данных SQLite
+        "NAME": BASE_DIR / "db.sqlite3",  # Путь к файлу базы данных
     }
 }
 
-
-# Проверка пароля
-# https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
-
+# Валидаторы паролей
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
@@ -110,10 +107,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
-# Интернационализация
-# https://docs.djangoproject.com/en/5.1/topics/i18n/
-
+# Настройки интернационализации
 LANGUAGE_CODE = "en-us"
 
 TIME_ZONE = "UTC"
@@ -122,16 +116,12 @@ USE_I18N = True
 
 USE_TZ = True
 
-
-# Статические файлы (CSS, JavaScript, Изображения)
-# https://docs.djangoproject.com/en/5.1/howto/static-files/
-
+# Настройки статических файлов (например, CSS, изображения)
 STATIC_URL = "static/"
 
-# Тип поля для первичного ключа по умолчанию
-# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
-
+# Тип поля по умолчанию для первичных ключей
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+# CORS настройки для разрешения всех источников
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOWS_CREDENTIALS = True
